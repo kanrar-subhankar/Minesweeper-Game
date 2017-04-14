@@ -96,14 +96,6 @@ while(True):
 	if(x==0):
 		exit(0)
 	else:
-		sum=1
-		for k in range(n):
-			for l in range(n):
-				str1='('
-				str2=')'
-				str_total=str1+str(sum)+str2
-				main_matrix[k][l]=str_total
-				sum+=1
 
 		pos=int(input("Enter the number where you want to go!!!"))
 		x,y=position_find(pos)
