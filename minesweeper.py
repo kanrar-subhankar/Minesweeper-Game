@@ -12,21 +12,30 @@ def position_find(pos):
 		y=(pos%n)-1
 	return x,y
 def pos_generator(pos,n):
-	if(pos%n==1):
+	if(pos%n==1 and pos!=(n*(n-1))+1 and pos!=1):
 		start=pos-n
 	elif(pos%n==0 and pos!=n):
 		start=pos-(n+2)
 	elif(pos<n):
 		start=pos
+	elif(pos%n==0 and pos<(n*(n-1))-1):
+		start=pos-2
+	elif(pos%n==0 and pos==(n*n)-n):
+		start=pos-(2*n)-2
+	elif(pos%n==1 and pos==(n*(n-1))+1):
+		start=pos-(2*n)
+	elif(pos>=(n*(n-1))+2):
+		start=pos-(2*(n+1))
 	else:
 		start=pos-(n+1)
 	return start
-def diagonal(n,p):
-	s=pos_generator(p,n)
+
+def full_traverse(p):
 	x,y=position_find(p)
+	s=pos_generator(p,n)
 	r,c=position_find(s)
-	z=p
 	count=0
+	z=p
 	for i in range(r,r+3):
 		for j in range(c,c+3):
 			if [i,j] in pos_mines[:][:]:
@@ -36,14 +45,13 @@ def diagonal(n,p):
 		return 
 	else:
 		main_matrix[x][y]=' '
-		u=z+n+1
-		z=u;
-		if(z!=n*n):
-			diagonal(n,u)
-		else:
-			return
-			
-def traverse(main_matrix,pos_mines,n,p):
+		if(p>n and p<((n*n)-n-2)):
+			full_traverse(p-(n+1))
+			full_traverse(p-n)
+			full_traverse(p-n+1)
+			full_traverse(p-1)
+					
+def traverse(n,p):
 	s=pos_generator(p,n)
 	x,y=position_find(p)
 	r,c=position_find(s)
@@ -58,7 +66,7 @@ def traverse(main_matrix,pos_mines,n,p):
 		return 
 	else:
 		main_matrix[x][y]=' '
-		diagonal(n,p)
+		full_traverse(p)
 		
 				
 #numpy can declare a matrix as np.arange(100).reshape(10*10)
@@ -79,12 +87,17 @@ for i in range(n):
 mines=int(input("Enter the no of Mines::"))
 
 pos_mines=[]
-for x in range(mines):
+for low in range(mines):
 	li2=[]
-	for j in range(2):
-		x=random.randint(1,n-1)
-		li2.append(x)
-	pos_mines.append(li2)
+	for j in range(1):
+		ty1=random.randint(0,n-1)
+		ty2=random.randint(0,n-1)
+		if([ty1,ty2] not in pos_mines[:][:]):
+			li2.append(ty1)
+			li2.append(ty2)
+			pos_mines.append(li2)
+		else:
+			j=0
 print pos_mines		
 for i in range(n):
 	for j in range(n):
@@ -102,12 +115,18 @@ while(True):
 		
 		##IF ENTER AT THE BOMB POSITION
 		if [x,y] in pos_mines[:][:]:
+			for l in range(len(pos_mines)):
+				ax1=pos_mines[l][0]
+				ax2=pos_mines[l][1]
+				main_matrix[ax1][ax2]='*'
+			for m in range(n):
+				for r in range(n):
+					print "\t",main_matrix[m][r],
+				print 
 			print "PLAY AGAIN"
 			exit(0)
 		else:
-			
-			traverse(main_matrix,pos_mines,n,pos)
-			
+			traverse(n,pos)
 			for i in range(n):
 				for j in range(n):
 					print "\t",main_matrix[i][j],
