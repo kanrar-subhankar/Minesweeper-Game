@@ -11,62 +11,25 @@ def position_find(pos):
 	else:
 		y=(pos%n)-1
 	return x,y
-def pos_generator(pos,n):
-	if(pos%n==1 and pos!=(n*(n-1))+1 and pos!=1):
-		start=pos-n
-	elif(pos%n==0 and pos!=n):
-		start=pos-(n+2)
-	elif(pos<n):
-		start=pos
-	elif(pos%n==0 and pos<(n*(n-1))-1):
-		start=pos-2
-	elif(pos%n==0 and pos==(n*n)-n):
-		start=pos-(2*n)-2
-	elif(pos%n==1 and pos==(n*(n-1))+1):
-		start=pos-(2*n)
-	elif(pos>=(n*(n-1))+2):
-		start=pos-(2*(n+1))
-	else:
-		start=pos-(n+1)
-	return start
-
-def full_traverse(p):
-	x,y=position_find(p)
-	s=pos_generator(p,n)
-	r,c=position_find(s)
-	count=0
-	z=p
-	for i in range(r,r+3):
-		for j in range(c,c+3):
-			if [i,j] in pos_mines[:][:]:
-				count+=1
-	if count!=0:
-		main_matrix[x][y]=count
-		return 
-	else:
-		main_matrix[x][y]=' '
-		if(p>n and p<((n*n)-n-2)):
-			full_traverse(p-(n+1))
-			full_traverse(p-n)
-			full_traverse(p-n+1)
-			full_traverse(p-1)
 					
-def traverse(n,p):
-	s=pos_generator(p,n)
-	x,y=position_find(p)
-	r,c=position_find(s)
+def traverse(n,x,y):
 	count=0
 	flag=0
-	for i in range(r,r+3):
-		for j in range(c,c+3):
-			if [i,j] in pos_mines[:][:]:
-				count+=1
+	for i in range(x-1,x+2,1):
+			for j in range(y-1,y+2,1):
+				if(i<n and j<n and i>=0 and j>=0):
+					if [i,j] in pos_mines[:][:]:
+						count+=1
 	if count!=0:
 		main_matrix[x][y]=count
 		return 
 	else:
 		main_matrix[x][y]=' '
-		full_traverse(p)
+		#full_traverse(s)
+		for i in range(x-1,x+2,1):
+			for j in range(y-1,y+2,1):
+				if(i<n and j<n and i>=0 and j>=0 and main_matrix[i][j]!=' '):
+					traverse(n,i,j)
 		
 				
 #numpy can declare a matrix as np.arange(100).reshape(10*10)
@@ -83,7 +46,6 @@ for i in range(n):
 		num+=1
 	main_matrix.append(li)
 	
-
 mines=int(input("Enter the no of Mines::"))
 
 pos_mines=[]
@@ -126,7 +88,7 @@ while(True):
 			print "PLAY AGAIN"
 			exit(0)
 		else:
-			traverse(n,pos)
+			traverse(n,x,y)
 			for i in range(n):
 				for j in range(n):
 					print "\t",main_matrix[i][j],
