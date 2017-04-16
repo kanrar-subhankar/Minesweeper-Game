@@ -60,7 +60,7 @@ for low in range(mines):
 			pos_mines.append(li2)
 		else:
 			j=0
-print pos_mines		
+			
 for i in range(n):
 	for j in range(n):
 		print "\t",main_matrix[i][j],
