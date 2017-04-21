@@ -30,7 +30,7 @@ def traverse(n,x,y):
 			for j in range(y-1,y+2,1):
 				if(i<n and j<n and i>=0 and j>=0 and main_matrix[i][j]!=' '):
 					traverse(n,i,j)
-		
+	return
 				
 #numpy can declare a matrix as np.arange(100).reshape(10*10)
 num=1
@@ -60,7 +60,6 @@ for low in range(mines):
 			pos_mines.append(li2)
 		else:
 			j=0
-			
 for i in range(n):
 	for j in range(n):
 		print "\t",main_matrix[i][j],
